@@ -131,7 +131,7 @@ func TestStringCustomFormatFn(t *testing.T) {
 		FormatStringFn = oldFn
 	}()
 	FormatStringFn = func(s String, f fmt.State, c rune) {
-		_, _ = f.Write([]byte("blah"))
+		Format(f, c, "blah")
 	}
 
 	value := String("value")

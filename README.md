@@ -75,7 +75,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 
 	"github.com/go-playground/sensitive"
@@ -85,10 +84,10 @@ func init() {
 	// override default Formatter
 	sensitive.FormatStringFn = func(s sensitive.String, f fmt.State, c rune) {
 		switch c {
-		case 's':
-			_, _ = io.WriteString(f, "redacted")
+		default:
+		        sensitive.Format(f, c, "redacted")
 		case 'v':
-			_, _ = io.WriteString(f, string(s)[:4]+"*******")
+		        sensitive.Format(f, c, string(s)[:4]+"*******")
 		}
 	}
 }
