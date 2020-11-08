@@ -1,4 +1,4 @@
-module github.com/go-playground/sensitive
+module github.com/powerman/sensitive
 
 go 1.14
 

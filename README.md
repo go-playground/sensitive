@@ -1,8 +1,8 @@
 ## Package sensitive
 
-<img align="right" src="https://raw.githubusercontent.com/go-playground/sensitive/master/logo.jpg">![Project status](https://img.shields.io/badge/version-0.0.1-green.svg)
-[![Build Status](https://travis-ci.org/go-playground/sensitive.svg?branch=master)](https://travis-ci.org/go-playground/sensitive)
-[![GoDoc](https://godoc.org/github.com/go-playground/sensitive?status.svg)](https://godoc.org/github.com/go-playground/sensitive)
+<img align="right" src="https://raw.githubusercontent.com/powerman/sensitive/master/logo.jpg">![Project status](https://img.shields.io/badge/version-0.0.1-green.svg)
+[![Build Status](https://travis-ci.org/powerman/sensitive.svg?branch=master)](https://travis-ci.org/powerman/sensitive)
+[![GoDoc](https://godoc.org/github.com/powerman/sensitive?status.svg)](https://godoc.org/github.com/powerman/sensitive)
 ![License](https://img.shields.io/dub/l/vibe-d.svg)
 
 Package sensitive provides base types who's values should never be seen by the human eye, but still used for configuration.
@@ -43,7 +43,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-playground/sensitive"
+	"github.com/powerman/sensitive"
 )
 
 func main() {
@@ -77,7 +77,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-playground/sensitive"
+	"github.com/powerman/sensitive"
 )
 
 func init() {

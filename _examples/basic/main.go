@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-playground/sensitive"
+	"github.com/powerman/sensitive"
 )
 
 func main() {
