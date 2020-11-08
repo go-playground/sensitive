@@ -17,6 +17,7 @@ As an added bonus using them as their base type eg. String => string, you have t
 
 Variables:
 - `String` - The most useful
+- `Bytes`
 - `Bool`
 - `Float32`
 - `Float64`
