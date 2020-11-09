@@ -27,6 +27,6 @@ func (s Bytes) MarshalJSON() ([]byte, error) {
 
 func (s Bytes) MarshalText() (text []byte, err error) {
 	var ss State
-	s.Format(&ss, 's')
+	s.Format(&ss, 'X')
 	return ss.b, nil
 }
