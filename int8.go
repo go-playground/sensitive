@@ -4,6 +4,7 @@ import (
 	"encoding"
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 var (
@@ -20,11 +21,20 @@ func (s Int8) Format(f fmt.State, c rune) {
 }
 
 func (s Int8) MarshalJSON() ([]byte, error) {
-	return json.Marshal(nil)
+	var ss State
+	s.Format(&ss, 'v')
+	if len(ss.b) == 0 {
+		return json.Marshal(nil)
+	}
+	v, err := strconv.ParseInt(string(ss.b), 10, 8)
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(int8(v))
 }
 
 func (s Int8) MarshalText() (text []byte, err error) {
 	var ss State
-	s.Format(&ss, 's')
+	s.Format(&ss, 'v')
 	return ss.b, nil
 }
