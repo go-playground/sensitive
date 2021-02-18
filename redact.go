@@ -12,6 +12,7 @@ import (
 //   Uint*:   math.MaxUint* (MaxUint32 for Uint)
 //   String:  "REDACTED"
 //   Bytes:   0xDEFACE
+//   Decimal: NaN
 func Redact() {
 	FormatBoolFn = func(s Bool, f fmt.State, c rune) { Format(f, 's', "FALSE") }
 	FormatFloat32Fn = func(s Float32, f fmt.State, c rune) { Format(f, c, float32(math.NaN())) }
@@ -28,4 +29,5 @@ func Redact() {
 	FormatUintFn = func(s Uint, f fmt.State, c rune) { Format(f, c, uint(math.MaxUint32)) }
 	FormatStringFn = func(s String, f fmt.State, c rune) { Format(f, c, "REDACTED") }
 	FormatBytesFn = func(s Bytes, f fmt.State, c rune) { Format(f, c, []byte{0xDE, 0xFA, 0xCE}) }
+	FormatDecimalFn = func(s Decimal, f fmt.State, c rune) { Format(f, c, math.NaN()) }
 }
