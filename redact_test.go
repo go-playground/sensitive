@@ -153,7 +153,7 @@ func ExampleRedact() {
 
 	output := func() {
 		fmt.Println(append(append([]interface{}{"fmt.Println(...):"}, vs...), "EOL")...)
-		fmt.Printf("fmt.Printf: %t %e %E %c %b %o %x %d %c %b %O %X %U %q %X %E EOL\n", vs...)
+		fmt.Printf("fmt.Printf: %t %e %E %c %b %o %x %d %c %b %O %X %U %q %X %v EOL\n", vs...)
 		fmt.Printf("fmt.Printf(vs): %v\n", vs)
 		fmt.Printf("fmt.Printf(imap): %v\n", imap)
 		fmt.Printf("fmt.Printf(vmap): %v\n", vmap)
@@ -168,6 +168,11 @@ func ExampleRedact() {
 	}
 	output()
 	Redact()
+	os.Unsetenv("GO_TEST_DISABLE_SENSITIVE")
+	Disable()
+	output()
+	os.Setenv("GO_TEST_DISABLE_SENSITIVE", "1")
+	Disable()
 	output()
 	// Output:
 	// fmt.Println(...):                 EOL
@@ -191,4 +196,16 @@ func ExampleRedact() {
 	// fmt.Printf(unexported): {true 4.2 42.42 -42 -4242 -424242 -42424242 -42424242 42 4242 424242 42424242 42424242 secret [115 101 99 114 101 116]}
 	// {}
 	// <Bool>FALSE</Bool><Float32>NaN</Float32><Float64>NaN</Float64><Int8>-128</Int8><Int16>-32768</Int16><Int32>-2147483648</Int32><Int64>-9223372036854775808</Int64><Int>-2147483648</Int><Uint8>255</Uint8><Uint16>65535</Uint16><Uint32>4294967295</Uint32><Uint64>18446744073709551615</Uint64><Uint>4294967295</Uint><String>REDACTED</String><Bytes>DEFACE</Bytes><Decimal>NaN</Decimal>
+	// fmt.Println(...): true 4.2 42.42 -42 -4242 -424242 -42424242 -42424242 42 4242 424242 42424242 42424242 secret [115 101 99 114 101 116] 42.42 EOL
+	// fmt.Printf: true 4.200000e+00 4.242000E+01 � -1000010010010 -1474462 -28757b2 -42424242 * 1000010010010 0o1474462 28757B2 U+28757B2 "secret" 736563726574 42.42 EOL
+	// fmt.Printf(vs): [true 4.2 42.42 -42 -4242 -424242 -42424242 -42424242 42 4242 424242 42424242 42424242 secret [115 101 99 114 101 116] 42.42]
+	// fmt.Printf(imap): map[true:true 4.2:4.2 42.42:42.42 -42424242:-42424242 -4242:-4242 -424242:-424242 -42424242:-42424242 -42:-42 secret:secret 42424242:42424242 4242:4242 424242:424242 42424242:42424242 42:42 42.42:42.42]
+	// fmt.Printf(vmap): map[Bool:true Bytes:[115 101 99 114 101 116] Decimal:42.42 Float32:4.2 Float64:42.42 Int:-42424242 Int16:-4242 Int32:-424242 Int64:-42424242 Int8:-42 String:secret Uint:42424242 Uint16:4242 Uint32:424242 Uint64:42424242 Uint8:42]
+	// fmt.Printf(exported): {true 4.2 42.42 -42 -4242 -424242 -42424242 -42424242 42 4242 424242 42424242 42424242 secret [115 101 99 114 101 116] 42.42}
+	// fmt.Printf(unexported): {true 4.2 42.42 -42 -4242 -424242 -42424242 -42424242 42 4242 424242 42424242 42424242 secret [115 101 99 114 101 116]}
+	// [true,4.2,42.42,-42,-4242,-424242,-42424242,-42424242,42,4242,424242,42424242,42424242,"secret","c2VjcmV0",42.42]
+	// {"Bool":true,"Bytes":"c2VjcmV0","Decimal":42.42,"Float32":4.2,"Float64":42.42,"Int":-42424242,"Int16":-4242,"Int32":-424242,"Int64":-42424242,"Int8":-42,"String":"secret","Uint":42424242,"Uint16":4242,"Uint32":424242,"Uint64":42424242,"Uint8":42}
+	// {"VBool":true,"VFloat32":4.2,"VFloat64":42.42,"VInt8":-42,"VInt16":-4242,"VInt32":-424242,"VInt64":-42424242,"VInt":-42424242,"VUint8":42,"VUint16":4242,"VUint32":424242,"VUint64":42424242,"VUint":42424242,"VString":"secret","VBytes":"c2VjcmV0","VDecimal":42.42}
+	// {}
+	// <Bool>true</Bool><Float32>4.2</Float32><Float64>42.42</Float64><Int8>-42</Int8><Int16>-4242</Int16><Int32>-424242</Int32><Int64>-42424242</Int64><Int>-42424242</Int><Uint8>42</Uint8><Uint16>4242</Uint16><Uint32>424242</Uint32><Uint64>42424242</Uint64><Uint>42424242</Uint><String>secret</String><Bytes>736563726574</Bytes><Decimal>42.42</Decimal>
 }
