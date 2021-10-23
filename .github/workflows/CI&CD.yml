@@ -1,0 +1,44 @@
+name: CI/CD
+
+on:
+  push:
+    branches: master
+    tags: v*
+  pull_request:
+    branches: master
+
+jobs:
+
+  test:
+    runs-on: 'ubuntu-latest'
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16'
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/bin
+            ~/go/pkg
+            ~/go/src
+            ~/.cache/go-build
+            ~/.cache/golangci-lint
+            .gobincache
+          key: v3-test-${{ runner.os }}-${{ hashFiles('go.mod') }}
+          restore-keys: |
+            v3-test-${{ runner.os }}-
+
+      - run: cd build/tools && go generate
+      - run: .gobincache/golangci-lint run
+      - run: go test -race ./...
+
+      - name: Report code coverage
+        env:
+          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+        if: env.COVERALLS_TOKEN
+        run: .gobincache/goveralls -service=GitHub
