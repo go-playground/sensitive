@@ -11,7 +11,7 @@ var (
 	_             fmt.Formatter          = (*Int64)(nil)
 	_             json.Marshaler         = (*Int64)(nil)
 	_             encoding.TextMarshaler = (*Int64)(nil)
-	FormatInt64Fn                        = func(s Int64, f fmt.State, c rune) {}
+	FormatInt64Fn                        = func(s Int64, f fmt.State, c rune) {} //nolint:gochecknoglobals // By design.
 )
 
 type Int64 int64
@@ -26,7 +26,7 @@ func (s Int64) MarshalJSON() ([]byte, error) {
 	if len(ss.b) == 0 {
 		return json.Marshal(nil)
 	}
-	v, err := strconv.ParseInt(string(ss.b), 10, 64)
+	v, err := strconv.ParseInt(string(ss.b), base10, bits64)
 	if err != nil {
 		return nil, err
 	}

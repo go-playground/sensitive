@@ -13,7 +13,7 @@ var (
 	_               fmt.Formatter          = (*Decimal)(nil)
 	_               json.Marshaler         = (*Decimal)(nil)
 	_               encoding.TextMarshaler = (*Decimal)(nil)
-	FormatDecimalFn                        = func(s Decimal, f fmt.State, c rune) {}
+	FormatDecimalFn                        = func(s Decimal, f fmt.State, c rune) {} //nolint:gochecknoglobals // By design.
 )
 
 type Decimal decimal.Decimal
@@ -28,7 +28,7 @@ func (s Decimal) MarshalJSON() ([]byte, error) {
 	if len(ss.b) == 0 {
 		return json.Marshal(nil)
 	}
-	v, err := strconv.ParseFloat(string(ss.b), 64)
+	v, err := strconv.ParseFloat(string(ss.b), bits64)
 	if err != nil {
 		return nil, err
 	}

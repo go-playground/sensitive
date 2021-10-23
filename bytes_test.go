@@ -1,4 +1,4 @@
-package sensitive
+package sensitive_test
 
 import (
 	"encoding/json"
@@ -6,12 +6,15 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/powerman/sensitive"
 )
 
 func TestBytesFormatting(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
-	value := Bytes("value")
-	var empty *Bytes
+	value := sensitive.Bytes("value")
+	var empty *sensitive.Bytes
 
 	tests := []struct {
 		name       string
@@ -110,14 +113,15 @@ func TestBytesFormatting(t *testing.T) {
 }
 
 func TestBytesJSON(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
-	value := Bytes("value")
+	value := sensitive.Bytes("value")
 
 	b, err := json.Marshal(value)
 	assert.NoError(err)
 	assert.Equal("null", string(b))
 
-	var empty *Bytes
+	var empty *sensitive.Bytes
 	b, err = json.Marshal(empty)
 	assert.NoError(err)
 	assert.Equal("null", string(b))
@@ -126,22 +130,22 @@ func TestBytesJSON(t *testing.T) {
 func TestBytesCustomFormatFn(t *testing.T) {
 	assert := require.New(t)
 
-	oldFn := FormatBytesFn
+	oldFn := sensitive.FormatBytesFn
 	defer func() {
-		FormatBytesFn = oldFn
+		sensitive.FormatBytesFn = oldFn
 	}()
-	FormatBytesFn = func(s Bytes, f fmt.State, c rune) {
+	sensitive.FormatBytesFn = func(s sensitive.Bytes, f fmt.State, c rune) {
 		_, _ = f.Write([]byte("blah"))
 	}
 
-	value := Bytes("value")
+	value := sensitive.Bytes("value")
 	b, err := json.Marshal(value)
 	assert.NoError(err)
 	assert.Equal("\"YmxhaA==\"", string(b))
 }
 
 func BenchmarkBytes_Format(b *testing.B) {
-	value := Bytes("value")
+	value := sensitive.Bytes("value")
 	for i := 0; i < b.N; i++ {
 		_ = fmt.Sprintf("%s", value)
 	}
@@ -150,12 +154,12 @@ func BenchmarkBytes_Format(b *testing.B) {
 func BenchmarkBytes_FormatNative(b *testing.B) {
 	value := "value"
 	for i := 0; i < b.N; i++ {
-		_ = fmt.Sprintf("%s", value)
+		_ = fmt.Sprintf("%s", value) //nolint:gosimple // Benchmark.
 	}
 }
 
 func BenchmarkBytesJSON(b *testing.B) {
-	value := Bytes("value")
+	value := sensitive.Bytes("value")
 	for i := 0; i < b.N; i++ {
 		_, _ = json.Marshal(value)
 	}

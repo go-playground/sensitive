@@ -1,19 +1,21 @@
-package sensitive
+package sensitive_test
 
 import (
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/powerman/sensitive"
 )
 
 func TestFormat(t *testing.T) {
-	oldFn := FormatStringFn
+	oldFn := sensitive.FormatStringFn
 	defer func() {
-		FormatStringFn = oldFn
+		sensitive.FormatStringFn = oldFn
 	}()
-	FormatStringFn = func(s String, f fmt.State, c rune) {
-		Format(f, c, string(s))
+	sensitive.FormatStringFn = func(s sensitive.String, f fmt.State, c rune) {
+		sensitive.Format(f, c, string(s))
 	}
 
 	tests := []struct {
@@ -31,7 +33,7 @@ func TestFormat(t *testing.T) {
 		t.Run(tc.formatting, func(t *testing.T) {
 			assert := require.New(t)
 			want := fmt.Sprintf(tc.formatting, "value")
-			result := fmt.Sprintf(tc.formatting, String("value"))
+			result := fmt.Sprintf(tc.formatting, sensitive.String("value"))
 			assert.Equal(want, result)
 		})
 	}

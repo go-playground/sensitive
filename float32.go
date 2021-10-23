@@ -11,7 +11,7 @@ var (
 	_               fmt.Formatter          = (*Float32)(nil)
 	_               json.Marshaler         = (*Float32)(nil)
 	_               encoding.TextMarshaler = (*Float32)(nil)
-	FormatFloat32Fn                        = func(s Float32, f fmt.State, c rune) {}
+	FormatFloat32Fn                        = func(s Float32, f fmt.State, c rune) {} //nolint:gochecknoglobals // By design.
 )
 
 type Float32 float32
@@ -26,7 +26,7 @@ func (s Float32) MarshalJSON() ([]byte, error) {
 	if len(ss.b) == 0 {
 		return json.Marshal(nil)
 	}
-	v, err := strconv.ParseFloat(string(ss.b), 32)
+	v, err := strconv.ParseFloat(string(ss.b), bits32)
 	if err != nil {
 		return nil, err
 	}

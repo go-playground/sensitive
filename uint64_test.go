@@ -1,4 +1,4 @@
-package sensitive
+package sensitive_test
 
 import (
 	"encoding/json"
@@ -6,12 +6,15 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/powerman/sensitive"
 )
 
 func TestUint64Formatting(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
-	value := Uint64(100)
-	var empty *Uint64
+	value := sensitive.Uint64(100)
+	var empty *sensitive.Uint64
 
 	tests := []struct {
 		name       string
@@ -110,9 +113,10 @@ func TestUint64Formatting(t *testing.T) {
 }
 
 func TestUint64_MarshalText(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
 
-	value := Uint64(100)
+	value := sensitive.Uint64(100)
 
 	b, err := value.MarshalText()
 	assert.NoError(err)
@@ -120,15 +124,16 @@ func TestUint64_MarshalText(t *testing.T) {
 }
 
 func TestUint64JSON(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
 
-	value := Uint64(100)
+	value := sensitive.Uint64(100)
 
 	b, err := json.Marshal(value)
 	assert.NoError(err)
 	assert.Equal("null", string(b))
 
-	var empty *Uint64
+	var empty *sensitive.Uint64
 	b, err = json.Marshal(empty)
 	assert.NoError(err)
 	assert.Equal("null", string(b))

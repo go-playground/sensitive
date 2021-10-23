@@ -19,8 +19,9 @@ import (
 //     }
 func Format(f fmt.State, c rune, value interface{}) {
 	const flags = "+-# 0"
+	const usualLen = 8
 	var format strings.Builder
-	format.Grow(8)
+	format.Grow(usualLen)
 	format.WriteRune('%')
 	for _, c := range flags {
 		if f.Flag(int(c)) {

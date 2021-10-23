@@ -1,4 +1,4 @@
-package sensitive
+package sensitive_test
 
 import (
 	"encoding/json"
@@ -6,12 +6,15 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/powerman/sensitive"
 )
 
 func TestStringFormatting(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
-	value := String("value")
-	var empty *String
+	value := sensitive.String("value")
+	var empty *sensitive.String
 
 	tests := []struct {
 		name       string
@@ -110,14 +113,15 @@ func TestStringFormatting(t *testing.T) {
 }
 
 func TestStringJSON(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
-	value := String("value")
+	value := sensitive.String("value")
 
 	b, err := json.Marshal(value)
 	assert.NoError(err)
 	assert.Equal("\"\"", string(b))
 
-	var empty *String
+	var empty *sensitive.String
 	b, err = json.Marshal(empty)
 	assert.NoError(err)
 	assert.Equal("null", string(b))
@@ -126,22 +130,22 @@ func TestStringJSON(t *testing.T) {
 func TestStringCustomFormatFn(t *testing.T) {
 	assert := require.New(t)
 
-	oldFn := FormatStringFn
+	oldFn := sensitive.FormatStringFn
 	defer func() {
-		FormatStringFn = oldFn
+		sensitive.FormatStringFn = oldFn
 	}()
-	FormatStringFn = func(s String, f fmt.State, c rune) {
-		Format(f, c, "blah")
+	sensitive.FormatStringFn = func(s sensitive.String, f fmt.State, c rune) {
+		sensitive.Format(f, c, "blah")
 	}
 
-	value := String("value")
+	value := sensitive.String("value")
 	b, err := json.Marshal(value)
 	assert.NoError(err)
 	assert.Equal("\"blah\"", string(b))
 }
 
 func BenchmarkString_Format(b *testing.B) {
-	value := String("value")
+	value := sensitive.String("value")
 	for i := 0; i < b.N; i++ {
 		_ = fmt.Sprintf("%s", value)
 	}
@@ -150,12 +154,12 @@ func BenchmarkString_Format(b *testing.B) {
 func BenchmarkString_FormatNative(b *testing.B) {
 	value := "value"
 	for i := 0; i < b.N; i++ {
-		_ = fmt.Sprintf("%s", value)
+		_ = fmt.Sprintf("%s", value) //nolint:gosimple // Benchmark.
 	}
 }
 
 func BenchmarkStringJSON(b *testing.B) {
-	value := String("value")
+	value := sensitive.String("value")
 	for i := 0; i < b.N; i++ {
 		_, _ = json.Marshal(value)
 	}

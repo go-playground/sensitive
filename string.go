@@ -10,7 +10,7 @@ var (
 	_              fmt.Formatter          = (*String)(nil)
 	_              json.Marshaler         = (*String)(nil)
 	_              encoding.TextMarshaler = (*String)(nil)
-	FormatStringFn                        = func(s String, f fmt.State, c rune) {}
+	FormatStringFn                        = func(s String, f fmt.State, c rune) {} //nolint:gochecknoglobals // By design.
 )
 
 type String string

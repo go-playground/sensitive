@@ -11,7 +11,7 @@ var (
 	_             fmt.Formatter          = (*Int16)(nil)
 	_             json.Marshaler         = (*Int16)(nil)
 	_             encoding.TextMarshaler = (*Int16)(nil)
-	FormatInt16Fn                        = func(s Int16, f fmt.State, c rune) {}
+	FormatInt16Fn                        = func(s Int16, f fmt.State, c rune) {} //nolint:gochecknoglobals // By design.
 )
 
 type Int16 int16
@@ -26,7 +26,7 @@ func (s Int16) MarshalJSON() ([]byte, error) {
 	if len(ss.b) == 0 {
 		return json.Marshal(nil)
 	}
-	v, err := strconv.ParseInt(string(ss.b), 10, 16)
+	v, err := strconv.ParseInt(string(ss.b), base10, bits16)
 	if err != nil {
 		return nil, err
 	}

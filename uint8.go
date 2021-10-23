@@ -11,7 +11,7 @@ var (
 	_             fmt.Formatter          = (*Uint8)(nil)
 	_             json.Marshaler         = (*Uint8)(nil)
 	_             encoding.TextMarshaler = (*Uint8)(nil)
-	FormatUint8Fn                        = func(s Uint8, f fmt.State, c rune) {}
+	FormatUint8Fn                        = func(s Uint8, f fmt.State, c rune) {} //nolint:gochecknoglobals // By design.
 )
 
 type Uint8 uint8
@@ -26,7 +26,7 @@ func (s Uint8) MarshalJSON() ([]byte, error) {
 	if len(ss.b) == 0 {
 		return json.Marshal(nil)
 	}
-	v, err := strconv.ParseUint(string(ss.b), 10, 8)
+	v, err := strconv.ParseUint(string(ss.b), base10, bits8)
 	if err != nil {
 		return nil, err
 	}

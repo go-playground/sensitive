@@ -1,4 +1,4 @@
-package sensitive
+package sensitive_test
 
 import (
 	"encoding/json"
@@ -6,12 +6,15 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/powerman/sensitive"
 )
 
 func TestBoolFormatting(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
-	value := Bool(true)
-	var empty *Bool
+	value := sensitive.Bool(true)
+	var empty *sensitive.Bool
 
 	tests := []struct {
 		name       string
@@ -110,14 +113,15 @@ func TestBoolFormatting(t *testing.T) {
 }
 
 func TestBoolJSON(t *testing.T) {
+	t.Parallel()
 	assert := require.New(t)
-	value := Bool(true)
+	value := sensitive.Bool(true)
 
 	b, err := json.Marshal(value)
 	assert.NoError(err)
 	assert.Equal("null", string(b))
 
-	var empty *Bool
+	var empty *sensitive.Bool
 	b, err = json.Marshal(empty)
 	assert.NoError(err)
 	assert.Equal("null", string(b))
@@ -126,14 +130,14 @@ func TestBoolJSON(t *testing.T) {
 func TestBoolCustomFormatFn(t *testing.T) {
 	assert := require.New(t)
 
-	oldFn := FormatBoolFn
+	oldFn := sensitive.FormatBoolFn
 	defer func() {
-		FormatBoolFn = oldFn
+		sensitive.FormatBoolFn = oldFn
 	}()
-	FormatBoolFn = func(s Bool, f fmt.State, c rune) {
+	sensitive.FormatBoolFn = func(s sensitive.Bool, f fmt.State, c rune) {
 		_, _ = f.Write([]byte("blah"))
 	}
 
-	value := Bool(true)
+	value := sensitive.Bool(true)
 	assert.Equal("blah", fmt.Sprintf("%s", value))
 }
