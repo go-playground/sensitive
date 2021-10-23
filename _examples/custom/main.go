@@ -36,6 +36,6 @@ func main() {
 	// output:
 	// redacted
 	// mypa*******
-	// "redacted"
+	// "mypa*******"
 	// null
 }
